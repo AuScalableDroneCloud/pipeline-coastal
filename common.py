@@ -1233,8 +1233,10 @@ def extract_from_folder(
             slope = False
 
         transect_file_input = [a for a in list_trans if location in a]
+        print("transect_file_input=",transect_file_input)
+        print("transect_file_input[0]=",transect_file_input[0])
         transect_file = gpd.read_file(transect_file_input[0])
-
+        
         tr_list = np.arange(0, transect_file.shape[0])
         for i in tqdm(tr_list):
             if mode == "dsm":
@@ -1260,6 +1262,8 @@ def extract_from_folder(
                     date_string=date_string,
                     add_xy=add_xy,
                 )
+
+            gdf.crs = temp.crs # TODO: gdf doesn't seem to have a crs atribute, so copy from temp
 
             gdf = pd.concat([temp, gdf], ignore_index=True)
 
@@ -2113,7 +2117,7 @@ def kmeans_sa(merged_df, ks, feature_set, thresh_k=5, random_state=10):
     # # Compute the mean optimal k of above threshold ks
     if isinstance(ks, dict):
         arr_k = np.array([i for i in ks.values() if i > thresh_k])
-        mean_threshold_k = np.int(np.round(np.mean(arr_k), 0))
+        mean_threshold_k = np.int_(np.round(np.mean(arr_k), 0)) # np.int(np.round(np.mean(arr_k), 0))
     else:
         pass
 
